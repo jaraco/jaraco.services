@@ -27,7 +27,6 @@ import urllib2
 import warnings
 import numbers
 
-import pkg_resources
 from jaraco.util.timing import Stopwatch
 from jaraco.util import properties
 
