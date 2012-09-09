@@ -364,6 +364,7 @@ class MongoDBInstance(MongoDBFinder, Subprocess, Service):
             self.find_binary(),
             '--dbpath', self.data_dir,
             '--port', str(self.port),
+            '--noprealloc',
         ]
         self.process = subprocess.Popen(cmd, stdout=self.get_log())
         self.wait_for_occupied_port(self.port)
