@@ -366,7 +366,11 @@ class MongoDBInstance(MongoDBFinder, Subprocess, Service):
             '--port', str(self.port),
             '--noprealloc',
             '--nojournal',
+            '--nohttpinterface',
+            '--syncdelay', '0',
         ]
+        if hasattr(self, 'bind_ip'):
+            cmd.extend(['--bind_ip', self.bind_ip])
         self.process = subprocess.Popen(cmd, stdout=self.get_log())
         self.wait_for_occupied_port(self.port)
         log.info('{self} listening on {self.port}'.format(**vars()))
