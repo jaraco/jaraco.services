@@ -368,6 +368,8 @@ class MongoDBInstance(MongoDBFinder, Subprocess, Service):
             '--nojournal',
             '--nohttpinterface',
             '--syncdelay', '0',
+            '--ipv6',
+            '--noauth',
         ]
         if hasattr(self, 'bind_ip'):
             cmd.extend(['--bind_ip', self.bind_ip])
