@@ -1,6 +1,7 @@
 import os
 import subprocess
-import itertools
+
+from six.moves import filter
 
 class PathFinder(object):
     """
@@ -32,7 +33,7 @@ class PathFinder(object):
         Generate valid roots for the target executable based on the
         candidate paths.
         """
-        return itertools.ifilter(cls.is_valid_root, cls.candidate_paths)
+        return filter(cls.is_valid_root, cls.candidate_paths)
 
     @classmethod
     def is_valid_root(cls, root):

@@ -23,9 +23,10 @@ import shutil
 import random
 import collections
 import importlib
-import urllib2
 import warnings
 import numbers
+
+from six.moves import urllib
 
 from jaraco.util.timing import Stopwatch
 from jaraco.util import properties
@@ -148,9 +149,9 @@ class HTTPStatus(object):
         url = '%(proto)s://%(host)s:%(port)d%(status_path)s' % vars()
         while True:
             try:
-                conn = urllib2.urlopen(url)
+                conn = urllib.request.urlopen(url)
                 break
-            except urllib2.HTTPError:
+            except urllib.error.HTTPError:
                 if timer.split() > timeout:
                     msg = ('Received status {err.code} from {self} on '
                         '{host}:{port}')
