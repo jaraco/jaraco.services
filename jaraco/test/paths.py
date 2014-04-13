@@ -1,6 +1,7 @@
 import os
 import subprocess
 
+import path
 from six.moves import filter
 
 class PathFinder(object):
@@ -25,7 +26,7 @@ class PathFinder(object):
         except StopIteration:
             raise RuntimeError("{cls.__name__} unable to find executables"
                 .format(**vars()))
-        return result
+        return path.path(result)
 
     @classmethod
     def find_valid_roots(cls):
