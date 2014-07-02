@@ -337,7 +337,7 @@ class MongoDBService(MongoDBFinder, Subprocess, Service):
         mongodb_data = os.path.join(sys.prefix, 'var', 'lib', 'mongodb')
         cmd = [
             self.find_binary(),
-            '--dbpath=%(mongodb_data)s' % vars(),
+            '--dbpath=' + mongodb_data,
         ]
         self.process = subprocess.Popen(cmd, stdout=self.get_log())
         self.wait_for_pattern('waiting for connections on port (?P<port>\d+)')
