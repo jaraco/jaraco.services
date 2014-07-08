@@ -386,6 +386,9 @@ class MongoDBInstance(MongoDBFinder, Subprocess, Service):
     def get_connect_hosts(self):
         return ['localhost:{self.port}'.format(**vars())]
 
+    def get_uri(self):
+        return 'mongodb://' + ','.join(self.get_connect_hosts())
+
     def stop(self):
         super(MongoDBInstance, self).stop()
         shutil.rmtree(self.data_dir)
