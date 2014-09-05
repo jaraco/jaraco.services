@@ -381,7 +381,7 @@ class MongoDBInstance(MongoDBFinder, Subprocess, Service):
 
     def get_connection(self):
         pymongo = importlib.import_module('pymongo')
-        return pymongo.Connection('localhost', self.port)
+        return pymongo.MongoClient('localhost', self.port)
 
     def get_connect_hosts(self):
         return ['localhost:{self.port}'.format(**vars())]
@@ -477,4 +477,4 @@ InstanceInfoBase = collections.namedtuple('InstanceInfoBase',
 class InstanceInfo(InstanceInfoBase):
     def connect(self):
         hp = 'localhost:{self.port}'.format(**vars())
-        return __import__('pymongo').Connection(hp, slave_okay=True)
+        return __import__('pymongo').MongoClient(hp, slave_okay=True)
