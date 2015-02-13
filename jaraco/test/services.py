@@ -146,7 +146,7 @@ class HTTPStatus(object):
         proto = self.proto
         port = self.port
         status_path = self.status_path
-        url = '%(proto)s://%(host)s:%(port)d%(status_path)s' % vars()
+        url = '%(proto)s://%(host)s:%(port)d%(status_path)s' % locals()
         while True:
             try:
                 conn = urllib.request.urlopen(url)
@@ -155,7 +155,7 @@ class HTTPStatus(object):
                 if timer.split() > timeout:
                     msg = ('Received status {err.code} from {self} on '
                         '{host}:{port}')
-                    raise ServiceNotRunningError(msg.format(**vars()))
+                    raise ServiceNotRunningError(msg.format(**locals()))
                 time.sleep(.5)
         return conn.read()
 
@@ -377,14 +377,14 @@ class MongoDBInstance(MongoDBFinder, Subprocess, Service):
             cmd.extend(['--bind_ip', self.bind_ip])
         self.process = subprocess.Popen(cmd, stdout=self.get_log())
         self.wait_for_occupied_port(self.port)
-        log.info('{self} listening on {self.port}'.format(**vars()))
+        log.info('{self} listening on {self.port}'.format(**locals()))
 
     def get_connection(self):
         pymongo = importlib.import_module('pymongo')
         return pymongo.MongoClient('localhost', self.port)
 
     def get_connect_hosts(self):
-        return ['localhost:{self.port}'.format(**vars())]
+        return ['localhost:{self.port}'.format(**locals())]
 
     def get_uri(self):
         return 'mongodb://' + ','.join(self.get_connect_hosts())
@@ -420,7 +420,7 @@ class MongoDBReplicaSet(MongoDBFinder, Service):
 
     def start_instance(self, number):
         port = self.find_free_port()
-        data_dir = os.path.join(self.data_root, 'r{number}'.format(**vars()))
+        data_dir = os.path.join(self.data_root, 'r{number}'.format(**locals()))
         os.mkdir(data_dir)
         cmd = [
             self.find_binary(),
@@ -434,11 +434,11 @@ class MongoDBReplicaSet(MongoDBFinder, Service):
         log_file = self.get_log(number)
         process = subprocess.Popen(cmd, stdout=log_file)
         wait_for_occupied_port('localhost', port)
-        log.info('{self}:{number} listening on {port}'.format(**vars()))
+        log.info('{self}:{number} listening on {port}'.format(**locals()))
         return InstanceInfo(data_dir, port, process, log_file)
 
     def get_log(self, number):
-        log_name = 'r{number}.log'.format(**vars())
+        log_name = 'r{number}.log'.format(**locals())
         log_filename = os.path.join(self.data_root, log_name)
         log_file = open(log_filename, 'a')
         return log_file
@@ -463,18 +463,18 @@ class MongoDBReplicaSet(MongoDBFinder, Service):
             members = [
                 dict(
                     _id=number,
-                    host='localhost:{instance.port}'.format(**vars()),
+                    host='localhost:{instance.port}'.format(**locals()),
                 ) for number, instance in enumerate(self.instances)
             ]
         )
 
     def get_connect_hosts(self):
-        return ['localhost:{instance.port}'.format(**vars())
+        return ['localhost:{instance.port}'.format(**locals())
             for instance in self.instances]
 
 InstanceInfoBase = collections.namedtuple('InstanceInfoBase',
     'path port process log_file')
 class InstanceInfo(InstanceInfoBase):
     def connect(self):
-        hp = 'localhost:{self.port}'.format(**vars())
+        hp = 'localhost:{self.port}'.format(**locals())
         return __import__('pymongo').MongoClient(hp, slave_okay=True)
