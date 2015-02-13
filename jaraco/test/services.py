@@ -52,6 +52,8 @@ class ServiceManager(list):
 
     def __init__(self, *args, **kwargs):
         super(ServiceManager, self).__init__(*args, **kwargs)
+        msg = "ServiceManager is deprecated. Use fixtures instead."
+        warnings.warn(msg, DeprecationWarning)
         self.failed = set()
 
     def __enter__(self):
