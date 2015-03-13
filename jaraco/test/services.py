@@ -25,6 +25,7 @@ import collections
 import importlib
 import warnings
 import numbers
+import glob
 
 from six.moves import urllib
 
@@ -307,21 +308,30 @@ class Service(object):
         return port
 
 class MongoDBFinder(paths.PathFinder):
-    candidate_paths = [
+    windows_installed = glob.glob('/Program Files/MongoDB/Server/???/bin')
+    windows_paths = [
+        # symlink Server/current to Server/X.X
+        '/Program Files/MongoDB/Server/current/bin',
+        # symlink MongoDB to mongodb-win32-x86_64-2008plus-X.X.X-rcX
+        '/Program Files/MongoDB/bin',
+    ] + list(reversed(windows_installed))
+    heuristic_paths = [
         # on the path
         '',
         # 10gen Debian package
         '/usr/bin',
         # custom install in /opt
         '/opt/mongodb/bin',
-        # typical Windows
-        '/Program Files/MongoDB/bin',
-    ]
+    ] + windows_paths
+
     # allow the environment to stipulate where mongodb must
     #  be found.
-    if 'MONGODB_HOME' in os.environ:
-        candidate_paths = [
-            os.path.join(os.environ['MONGODB_HOME'], 'bin')]
+    env_paths = [
+        os.path.join(os.environ[key], 'bin')
+        for key in 'MONGODB_HOME'
+        if key in os.environ
+    ]
+    candidate_paths = env_paths or heuristic_paths
     exe = 'mongod'
     args = ['--version']
 
