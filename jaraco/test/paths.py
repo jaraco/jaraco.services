@@ -1,9 +1,13 @@
 import os
 import subprocess
+import abc
 
 import path
+import six
 from six.moves import filter
 
+
+@six.add_metaclass(abc.ABCMeta)
 class PathFinder(object):
     """
     A base class for locating an executable or executables.
@@ -11,8 +15,9 @@ class PathFinder(object):
     candidate_paths = ['']
     "Potential roots to search for self.exe"
 
-    exe = None
-    "The target executable (must be set by subclass)"
+    @abc.abstractproperty
+    def exe(self):
+        "The target executable"
 
     args = []
     "Additional args to pass to the exe when testing for its suitability"
