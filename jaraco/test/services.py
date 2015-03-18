@@ -29,11 +29,11 @@ import glob
 
 from six.moves import urllib
 
+import portend
 from jaraco.timing import Stopwatch
 from jaraco.classes import properties
 
 from . import paths
-from .socket_test import check_port, wait_for_occupied_port
 
 __all__ = ['ServiceManager', 'Guard', 'HTTPStatus', 'MongoDBInstance']
 
@@ -295,7 +295,7 @@ class Service(object):
     @staticmethod
     def port_free(port, host='localhost'):
         try:
-            check_port(host, port, timeout=0.1)
+            portend._check_port(host, port, timeout=0.1)
         except IOError:
             return False
         return True
@@ -445,7 +445,7 @@ class MongoDBReplicaSet(MongoDBFinder, Service):
         ]
         log_file = self.get_log(number)
         process = subprocess.Popen(cmd, stdout=log_file)
-        wait_for_occupied_port('localhost', port)
+        portend.occupied('localhost', port, timeout=50)
         log.info('{self}:{number} listening on {port}'.format(**locals()))
         return InstanceInfo(data_dir, port, process, log_file)
 
