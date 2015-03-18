@@ -328,7 +328,7 @@ class MongoDBFinder(paths.PathFinder):
     #  be found.
     env_paths = [
         os.path.join(os.environ[key], 'bin')
-        for key in 'MONGODB_HOME'
+        for key in ['MONGODB_HOME']
         if key in os.environ
     ]
     candidate_paths = env_paths or heuristic_paths
