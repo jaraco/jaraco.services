@@ -29,8 +29,8 @@ import glob
 
 from six.moves import urllib
 
-from jaraco.util.timing import Stopwatch
-from jaraco.util import properties
+from jaraco.timing import Stopwatch
+from jaraco.classes import properties
 
 from . import paths
 from .socket_test import check_port, wait_for_occupied_port
