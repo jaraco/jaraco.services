@@ -7,7 +7,6 @@ import six
 from six.moves import filter
 
 
-@six.add_metaclass(abc.ABCMeta)
 class PathFinder(object):
     """
     A base class for locating an executable or executables.
@@ -15,9 +14,10 @@ class PathFinder(object):
     candidate_paths = ['']
     "Potential roots to search for self.exe"
 
-    @abc.abstractproperty
     def exe(self):
         "The target executable"
+    if not six.PY2:
+        exe = abc.abstractproperty(exe)
 
     args = []
     "Additional args to pass to the exe when testing for its suitability"
@@ -49,3 +49,6 @@ class PathFinder(object):
         except OSError:
             return False
         return True
+
+if not six.PY2:
+    PathFinder = six.add_metaclass(abc.ABCMeta)(PathFinder)
