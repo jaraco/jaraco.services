@@ -24,7 +24,6 @@ import random
 import collections
 import importlib
 import warnings
-import numbers
 import glob
 
 from six.moves import urllib
@@ -144,7 +143,7 @@ class HTTPStatus(object):
     def wait_for_http(self, host='localhost', timeout=15):
         timeout = datetime.timedelta(seconds=timeout)
         timer = Stopwatch()
-        self.wait_for_occupied_port(self.port, host)
+        portend.occupied(host, self.port, timeout=1)
 
         proto = self.proto
         port = self.port
@@ -227,19 +226,6 @@ class Subprocess(object):
             if res:
                 self.__dict__.update(res.groupdict())
                 return
-
-    def wait_for_occupied_port(self, port_number, host='localhost',
-            timeout=1):
-        if isinstance(timeout, numbers.Number):
-            timeout = datetime.timedelta(seconds=timeout)
-        watch = Stopwatch()
-        while True:
-            self.assert_running()
-            try:
-                return wait_for_occupied_port(host, port_number)
-            except Exception:
-                if watch.split() > timeout:
-                    raise
 
     def assert_running(self):
         process_running = self.process.returncode is None
@@ -388,7 +374,7 @@ class MongoDBInstance(MongoDBFinder, Subprocess, Service):
         if hasattr(self, 'bind_ip'):
             cmd.extend(['--bind_ip', self.bind_ip])
         self.process = subprocess.Popen(cmd, stdout=self.get_log())
-        self.wait_for_occupied_port(self.port)
+        portend.occupied('localhost', self.port, timeout=1)
         log.info('{self} listening on {self.port}'.format(**locals()))
 
     def get_connection(self):
