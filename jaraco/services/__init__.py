@@ -1,11 +1,12 @@
 """
-This module provides a ServiceManager and some Service classes for a
-selection of services.
+This module provides a Service base class for
+modeling management of a service, typically launched as a subprocess.
 
-The ServiceManager
-acts as a collection of the services and can monitor which are running
-and start services on demand. This provides an easy entry point for
-managing services in a development/testing environment.
+The ServiceManager (deprecated)
+acts as a collection of interdependent services, can monitor which are
+running, and will start services on demand. The use case for ServiceManager
+has been superseded by the more elegant `pytest fixtures
+<https://pytest.org/latest/fixture.html>`_ model.
 """
 
 from __future__ import absolute_import
