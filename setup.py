@@ -26,6 +26,11 @@ setup_params = dict(
 	packages=setuptools.find_packages(),
 	namespace_packages=['jaraco'],
 	install_requires=[
+		'six',
+		'portend',
+		'path.py',
+		'jaraco.timing',
+		'jaraco.classes',
 	],
 	setup_requires=[
 		'setuptools_scm',
