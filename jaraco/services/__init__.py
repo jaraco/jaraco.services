@@ -27,7 +27,8 @@ from jaraco.timing import Stopwatch
 from jaraco.classes import properties
 
 
-__all__ = ['ServiceManager', 'Guard', 'HTTPStatus']
+__all__ = ['ServiceManager', 'Guard', 'HTTPStatus', 'Subprocess', 'Dependable',
+    'Service']
 
 log = logging.getLogger(__name__)
 
