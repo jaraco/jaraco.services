@@ -283,7 +283,6 @@ class Service(object):
 
     @staticmethod
     def find_free_port():
-        while True:
-            port = random.randint(1024, 65535)
-            if Service.port_free(port): break
-        return port
+        msg = "Use portend.find_available_local_port"
+        warnings.warn(msg, DeprecationWarning)
+        return portend.find_available_local_port()
