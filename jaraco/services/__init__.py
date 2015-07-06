@@ -18,7 +18,6 @@ import time
 import re
 import datetime
 import functools
-import random
 import warnings
 
 from six.moves import urllib
