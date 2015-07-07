@@ -138,7 +138,7 @@ class HTTPStatus(object):
         proto = self.proto
         port = self.port
         status_path = self.status_path
-        url = '%(proto)s://%(host)s:%(port)d%(path)s' % locals()
+        return '%(proto)s://%(host)s:%(port)d%(path)s' % locals()
 
     def wait_for_http(self, host='localhost', timeout=15):
         timeout = datetime.timedelta(seconds=timeout)
