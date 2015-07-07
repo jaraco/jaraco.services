@@ -1,0 +1,4 @@
+1.1
+===
+
+Add ``HTTPStatus.build_url``.

@@ -134,15 +134,18 @@ class HTTPStatus(object):
     proto = 'http'
     status_path = '/_status/system'
 
+    def build_url(self, path, host='localhost'):
+        proto = self.proto
+        port = self.port
+        status_path = self.status_path
+        url = '%(proto)s://%(host)s:%(port)d%(path)s' % locals()
+
     def wait_for_http(self, host='localhost', timeout=15):
         timeout = datetime.timedelta(seconds=timeout)
         timer = Stopwatch()
         portend.occupied(host, self.port, timeout=1)
 
-        proto = self.proto
-        port = self.port
-        status_path = self.status_path
-        url = '%(proto)s://%(host)s:%(port)d%(status_path)s' % locals()
+        url = self.build_url(self.status_path)
         while True:
             try:
                 conn = urllib.request.urlopen(url)
