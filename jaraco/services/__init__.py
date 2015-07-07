@@ -150,7 +150,7 @@ class HTTPStatus(object):
             try:
                 conn = urllib.request.urlopen(url)
                 break
-            except urllib.error.HTTPError:
+            except urllib.error.HTTPError as err:
                 if timer.split() > timeout:
                     msg = ('Received status {err.code} from {self} on '
                         '{host}:{port}')
