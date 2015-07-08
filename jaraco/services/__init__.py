@@ -19,9 +19,12 @@ import re
 import datetime
 import functools
 import warnings
+import subprocess
+import io
 
 from six.moves import urllib
 
+import path
 import portend
 from jaraco.timing import Stopwatch
 from jaraco.classes import properties
@@ -288,3 +291,72 @@ class Service(object):
         msg = "Use portend.find_available_local_port"
         warnings.warn(msg, DeprecationWarning)
         return portend.find_available_local_port()
+
+
+class PythonService(Service, Subprocess):
+    """
+    A service created by installing a package_spec into an environment and
+    invoking a command.
+    """
+
+    installer = 'pip install'
+    python = os.path.basename(sys.executable)
+
+    @property
+    def name(self):
+        return self.__class__.__name__.lower()
+
+    @property
+    def package_spec(self):
+        return self.name
+
+    @property
+    def command(self):
+        return [self.python, '-m', self.name]
+
+    @property
+    def _run_env(self):
+        """
+        Augment the current environment providing the PYTHONUSERBASE.
+        """
+        env = dict(os.environ)
+        env.update(
+            getattr(self, 'env', {}),
+            PYTHONUSERBASE=self.env_path,
+            PIP_USER="1",
+        )
+        self._disable_venv(env)
+        return env
+
+    def _disable_venv(self, env):
+        """
+        Disable virtualenv and venv in the environment.
+        """
+        venv = env.pop('VIRTUAL_ENV', None)
+        if venv:
+            venv_path, sep, env['PATH'] = env['PATH'].partition(os.pathsep)
+
+    def create_env(self):
+        """
+        Create a PEP-370 environment
+        """
+        root = path.Path(os.environ.get('SERVICES_ROOT', 'services'))
+        self.env_path = (root / self.name).abspath()
+        cmd = [self.python, '-c', 'import site; print(site.getusersitepackages())']
+        out = subprocess.check_output(cmd, env=self._run_env)
+        site_packages = out.decode().strip()
+        path.Path(site_packages).makedirs_p()
+
+    def install(self):
+        installer = self.installer.split()
+        cmd = [self.python, '-m'] + installer + [self.package_spec]
+        subprocess.check_call(cmd, env=self._run_env)
+
+    def start(self):
+        super(PythonService, self).start()
+        self.create_env()
+        self.install()
+        self.stdout = io.BytesIO()
+        self.stderr = io.BytesIO()
+        self.process = subprocess.Popen(self.command, env=self._run_env,
+            stdout=self.stdout, stderr=self.stderr)

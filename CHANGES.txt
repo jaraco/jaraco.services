@@ -1,3 +1,10 @@
+1.2
+===
+
+Added ``PythonService`` class, which will install a Python package
+into an environment and then launch a process in that
+environment.
+
 1.1
 ===
 
