@@ -20,7 +20,6 @@ import datetime
 import functools
 import warnings
 import subprocess
-import io
 
 from six.moves import urllib
 
@@ -356,7 +355,6 @@ class PythonService(Service, Subprocess):
         super(PythonService, self).start()
         self.create_env()
         self.install()
-        self.stdout = io.BytesIO()
-        self.stderr = io.BytesIO()
+        output = (self.env_path / 'output.txt').open('ab')
         self.process = subprocess.Popen(self.command, env=self._run_env,
-            stdout=self.stdout, stderr=self.stderr)
+            stdout=output, stderr=subprocess.STDOUT)
