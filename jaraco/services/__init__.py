@@ -145,7 +145,7 @@ class HTTPStatus(object):
     def wait_for_http(self, host='localhost', timeout=15):
         timeout = datetime.timedelta(seconds=timeout)
         timer = Stopwatch()
-        portend.occupied(host, self.port, timeout=1)
+        portend.occupied(host, self.port, timeout=timeout)
 
         url = self.build_url(self.status_path)
         while True:
