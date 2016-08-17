@@ -116,7 +116,21 @@ class ServiceManager(list):
 
 
 class Guard(object):
-    "Prevent execution of a function unless arguments pass self.allowed()"
+    """
+    Prevent execution of a function unless arguments pass self.allowed()
+
+    >>> class OnlyInts(Guard):
+    ...     def allowed(self, *args, **kwargs):
+    ...         return all(isinstance(arg, int) for arg in args)
+    >>> @OnlyInts()
+    ... def the_func(val):
+    ...     print(val)
+    >>> the_func(1)
+    1
+    >>> the_func('1')
+    >>> the_func(1, '1') is None
+    True
+    """
     def __call__(self, func):
         @functools.wraps(func)
         def guarded(*args, **kwargs):
