@@ -34,7 +34,7 @@ setup_params = dict(
 	install_requires=[
 		'six',
 		'portend',
-		'path.py',
+		'path.py>=6.2',
 		'jaraco.timing',
 		'jaraco.classes',
 	],

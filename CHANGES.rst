@@ -1,3 +1,8 @@
+1.4.1
+=====
+
+Use ``path.Path`` for compatibility with path.py 10.
+
 1.4
 ===
 

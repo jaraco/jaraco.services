@@ -31,7 +31,7 @@ class PathFinder(object):
         except StopIteration:
             raise RuntimeError("{cls.__name__} unable to find executables"
                 .format(**vars()))
-        return path.path(result)
+        return path.Path(result)
 
     @classmethod
     def find_valid_roots(cls):
