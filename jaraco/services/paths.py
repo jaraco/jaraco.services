@@ -25,6 +25,14 @@ class PathFinder(object):
     DEV_NULL = open(os.path.devnull, 'r+')
 
     @classmethod
+    def resolve(cls):
+        """
+        Resolve an executable or raise RuntimeError if one
+        cannot be found.
+        """
+        return cls.find_root() / cls.exe
+
+    @classmethod
     def find_root(cls):
         try:
             result = next(cls.find_valid_roots())

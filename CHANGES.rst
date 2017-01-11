@@ -1,3 +1,10 @@
+1.5
+===
+
+In ``services.paths``, add ``PathFinder.resolve`` as a convenience
+wrapper for including the resolved executable suitable for passing
+to subprocess.Popen.
+
 1.4.1
 =====
 
