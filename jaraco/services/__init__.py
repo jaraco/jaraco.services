@@ -294,8 +294,8 @@ class Service(object):
     @staticmethod
     def port_free(port, host='localhost'):
         try:
-            portend._check_port(host, port, timeout=0.1)
-        except IOError:
+            portend.free(host, port, timeout=0.1)
+        except portend.Timeout:
             return False
         return True
 

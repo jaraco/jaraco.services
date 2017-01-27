@@ -1,3 +1,9 @@
+1.5.1
+=====
+
+#1: Replace use of private ``portend._check_port`` with call to
+``portend.free``.
+
 1.5
 ===
 
