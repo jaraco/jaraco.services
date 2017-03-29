@@ -18,7 +18,7 @@ class TestHTTPStatus:
         )
 
     def test_HTTPError(self, monkeypatch):
-        monkeypatch.setattr('urllib.request.urlopen', self.http_error)
+        monkeypatch.setattr(urllib.request, 'urlopen', self.http_error)
         monkeypatch.setattr('portend.occupied', lambda *a, **kw: None)
         status = services.HTTPStatus()
         status.port = 80
