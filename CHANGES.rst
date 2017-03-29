@@ -1,3 +1,9 @@
+1.5.2
+=====
+
+#2: Correct scope for ``port`` reference in HTTPStatus error
+template.
+
 1.5.1
 =====
 

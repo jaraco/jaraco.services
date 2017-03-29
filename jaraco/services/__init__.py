@@ -169,7 +169,7 @@ class HTTPStatus(object):
             except urllib.error.HTTPError as err:
                 if timer.split() > timeout:
                     msg = ('Received status {err.code} from {self} on '
-                        '{host}:{port}')
+                        '{host}:{self.port}')
                     raise ServiceNotRunningError(msg.format(**locals()))
                 time.sleep(.5)
         return conn.read()
