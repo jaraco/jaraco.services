@@ -149,12 +149,11 @@ class HTTPStatus(object):
 
     proto = 'http'
     status_path = '/_status/system'
+    _url = '{self.proto}://{host}:{self.port}{path}'
+    _err = 'Received status {err.code} from {self} on {host}:{self.port}'
 
     def build_url(self, path, host='localhost'):
-        proto = self.proto
-        port = self.port
-        status_path = self.status_path
-        return '%(proto)s://%(host)s:%(port)d%(path)s' % locals()
+        return self._url.format(**locals())
 
     def wait_for_http(self, host='localhost', timeout=15):
         timeout = datetime.timedelta(seconds=timeout)
@@ -168,9 +167,7 @@ class HTTPStatus(object):
                 break
             except urllib.error.HTTPError as err:
                 if timer.split() > timeout:
-                    msg = ('Received status {err.code} from {self} on '
-                        '{host}:{self.port}')
-                    raise ServiceNotRunningError(msg.format(**locals()))
+                    raise ServiceNotRunningError(self._err.format(**locals()))
                 time.sleep(.5)
         return conn.read()
 
