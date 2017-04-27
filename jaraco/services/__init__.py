@@ -299,7 +299,7 @@ class Service(object):
     @staticmethod
     def find_free_port():
         msg = "Use portend.find_available_local_port"
-        warnings.warn(msg, DeprecationWarning)
+        warnings.warn(msg, DeprecationWarning, stacklevel=2)
         return portend.find_available_local_port()
 
 
