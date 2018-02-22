@@ -65,3 +65,18 @@ class VirtualEnv(object):
 
     def env_vars(self):
         return {}
+
+
+class _VEnv(VirtualEnv):
+    """
+    Experimental version of VirtualEnv, requires target environment
+    to be Python 3.
+    """
+    def ensure_env(self):
+        executable = getattr(self, 'python', sys.executable)
+        cmd = [
+            executable,
+            '-m', 'venv',
+            self.dir,
+        ]
+        subprocess.check_call(cmd)
