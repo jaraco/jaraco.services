@@ -21,12 +21,15 @@ def _is_virtual():
 
 
 class VirtualEnv(object):
-    def __init__(self):
+    def _get_root(self):
         default = 'services'
         if _is_virtual():
             default = os.path.join(sys.prefix, default)
-        root = Path(os.environ.get('SERVICES_ROOT', default))
-        self.dir = root / self.name
+        return Path(os.environ.get('SERVICES_ROOT', default))
+
+    @property
+    def dir(self):
+        return self._get_root() / self.name
 
     def create(self):
         self.ensure_env()
