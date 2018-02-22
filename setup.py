@@ -38,6 +38,7 @@ params = dict(
 		'path.py>=6.2',
 		'jaraco.timing',
 		'jaraco.classes',
+		'contextlib2',
 	],
 	extras_require={
 		'testing': [
