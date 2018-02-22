@@ -37,7 +37,8 @@ class PathFinder(object):
         try:
             result = next(cls.find_valid_roots())
         except StopIteration:
-            raise RuntimeError("{cls.__name__} unable to find executables"
+            raise RuntimeError(
+                "{cls.__name__} unable to find executables"
                 .format(**vars()))
         return path.Path(result)
 
@@ -57,6 +58,7 @@ class PathFinder(object):
         except OSError:
             return False
         return True
+
 
 if not six.PY2:
     PathFinder = six.add_metaclass(abc.ABCMeta)(PathFinder)

@@ -29,13 +29,16 @@ from jaraco.timing import Stopwatch
 from jaraco.classes import properties
 
 
-__all__ = ['ServiceManager', 'Guard', 'HTTPStatus', 'Subprocess', 'Dependable',
-    'Service']
+__all__ = [
+    'ServiceManager', 'Guard', 'HTTPStatus', 'Subprocess', 'Dependable',
+    'Service',
+]
 
 log = logging.getLogger(__name__)
 
 
-class ServiceNotRunningError(Exception): pass
+class ServiceNotRunningError(Exception):
+    pass
 
 
 class ServiceManager(list):
@@ -60,7 +63,8 @@ class ServiceManager(list):
 
     @property
     def running(self):
-        is_running = lambda p: p.is_running()
+        def is_running(p):
+            return p.is_running()
         return filter(is_running, self)
 
     def start(self, service):
@@ -69,7 +73,8 @@ class ServiceManager(list):
         """
         try:
             map(self.start_class, service.depends)
-            if service.is_running(): return
+            if service.is_running():
+                return
             if service in self.failed:
                 log.warning("%s previously failed to start", service)
                 return
@@ -135,7 +140,8 @@ class Guard(object):
         @functools.wraps(func)
         def guarded(*args, **kwargs):
             res = self.allowed(*args, **kwargs)
-            if res: return func(*args, **kwargs)
+            if res:
+                return func(*args, **kwargs)
         return guarded
 
     def allowed(self, *args, **kwargs):
@@ -177,8 +183,11 @@ class Subprocess(object):
     Mix-in to handle common subprocess handling
     """
     def is_running(self):
-        return (self.is_external()
-            or hasattr(self, 'process') and self.process.returncode is None)
+        return (
+            self.is_external()
+            or hasattr(self, 'process')
+            and self.process.returncode is None
+        )
 
     def is_external(self):
         """
@@ -201,7 +210,10 @@ class Subprocess(object):
         to use a path relative to the root. If sys.prefix is /usr, it's the
         system Python, so use /var/log.
         """
-        var_log = os.path.join(sys.prefix, 'var', 'log').replace('/usr/var', '/var')
+        var_log = (
+            os.path.join(sys.prefix, 'var', 'log')
+            .replace('/usr/var', '/var')
+        )
         if not os.path.isdir(var_log):
             os.makedirs(var_log)
         return var_log
@@ -223,7 +235,8 @@ class Subprocess(object):
         timer = Stopwatch()
         while timer.split() < timeout:
             data = file.read()
-            if data: return data
+            if data:
+                return data
         raise RuntimeError("Timeout")
 
     def wait_for_pattern(self, pattern, timeout=5):
@@ -245,13 +258,15 @@ class Subprocess(object):
     class PortFree(Guard):
         def __init__(self, port=None):
             if port is not None:
-                warnings.warn("Passing port to PortFree is deprecated",
+                warnings.warn(
+                    "Passing port to PortFree is deprecated",
                     DeprecationWarning)
 
         def allowed(self, service, *args, **kwargs):
             port_free = service.port_free(service.port)
             if not port_free:
-                log.warning("%s already running on port %s", service,
+                log.warning(
+                    "%s already running on port %s", service,
                     service.port)
                 service.external = True
             return port_free
@@ -259,10 +274,12 @@ class Subprocess(object):
 
 class Dependable(type):
     """
-    Metaclass to keep track of services which are depended on by others.
+    Metaclass to keep track of services which are depended on
+    by others.
 
-    When a class (cls) is created which depends on another (dep), the other gets
-    a reference to cls in its depended_by attribute.
+    When a class (cls) is created which depends on another
+    (dep), the other gets a reference to cls in its depended_by
+    attribute.
     """
     def __init__(cls, name, bases, attribs):
         type.__init__(cls, name, bases, attribs)
@@ -280,7 +297,8 @@ class Service(object):
     def start(self):
         log.info('Starting service %s', self)
 
-    def is_running(self): return False
+    def is_running(self):
+        return False
 
     def stop(self):
         log.info('Stopping service %s', self)
@@ -352,7 +370,10 @@ class PythonService(Service, Subprocess):
         """
         root = path.Path(os.environ.get('SERVICES_ROOT', 'services'))
         self.env_path = (root / self.name).abspath()
-        cmd = [self.python, '-c', 'import site; print(site.getusersitepackages())']
+        cmd = [
+            self.python,
+            '-c', 'import site; print(site.getusersitepackages())',
+        ]
         out = subprocess.check_output(cmd, env=self._run_env)
         site_packages = out.decode().strip()
         path.Path(site_packages).makedirs_p()
@@ -367,5 +388,6 @@ class PythonService(Service, Subprocess):
         self.create_env()
         self.install()
         output = (self.env_path / 'output.txt').open('ab')
-        self.process = subprocess.Popen(self.command, env=self._run_env,
+        self.process = subprocess.Popen(
+            self.command, env=self._run_env,
             stdout=output, stderr=subprocess.STDOUT)
