@@ -1,3 +1,8 @@
+1.6
+===
+
+Added ``jaraco.services.envs`` with ``VirtualEnv`` class.
+
 1.5.2
 =====
 

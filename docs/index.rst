@@ -12,6 +12,11 @@ Welcome to jaraco.services documentation!
     :undoc-members:
     :show-inheritance:
 
+.. automodule:: jaraco.services.envs
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Indices and tables
 ==================
