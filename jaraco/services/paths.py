@@ -39,7 +39,7 @@ class PathFinder(object):
         except StopIteration:
             raise RuntimeError(
                 "{cls.__name__} unable to find executables"
-                .format(**vars()))
+                .format(**locals()))
         return path.Path(result)
 
     @classmethod
