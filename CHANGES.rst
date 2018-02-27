@@ -1,3 +1,8 @@
+1.6.1
+=====
+
+Add missing dependency on virtualenv.
+
 1.6
 ===
 

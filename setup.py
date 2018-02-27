@@ -39,6 +39,7 @@ params = dict(
 		'jaraco.timing',
 		'jaraco.classes',
 		'contextlib2',
+		'virtualenv',
 	],
 	extras_require={
 		'testing': [
