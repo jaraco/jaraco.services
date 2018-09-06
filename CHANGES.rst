@@ -1,3 +1,14 @@
+1.7
+===
+
+#3: Service envs are now created in ``.cache/services`` by
+default and no longer consider whether the services are
+being created in a virtualenv. This allows all services to
+be created in one flat system. Clients that wish to continue
+to create services within a virtualenv's root should override
+the envs.VirtualEnv.root property (on the class or the
+instance).
+
 1.6.1
 =====
 

@@ -13,26 +13,12 @@ from path import Path
 __metaclass__ = type
 
 
-def _is_virtual():
-    """
-    Is this Python running in a virtualenv or a venv?
-    """
-    return (
-        getattr(sys, 'base_prefix', sys.prefix) != sys.prefix
-        or hasattr(sys, 'real_prefix')
-    )
-
-
 class VirtualEnv:
-    def _get_root(self):
-        default = 'services'
-        if _is_virtual():
-            default = os.path.join(sys.prefix, default)
-        return Path(os.environ.get('SERVICES_ROOT', default))
+    root = Path(os.environ.get('SERVICES_ROOT', '.cache/services'))
 
     @property
     def dir(self):
-        return self._get_root() / self.name
+        return self.root / self.name
 
     def create(self):
         self.ensure_env()
