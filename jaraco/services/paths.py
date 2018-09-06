@@ -7,7 +7,10 @@ import six
 from six.moves import filter
 
 
-class PathFinder(object):
+__metaclass__ = type
+
+
+class PathFinder:
     """
     A base class for locating an executable or executables.
     """

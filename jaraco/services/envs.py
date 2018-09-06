@@ -10,6 +10,9 @@ import contextlib2
 from path import Path
 
 
+__metaclass__ = type
+
+
 def _is_virtual():
     """
     Is this Python running in a virtualenv or a venv?
@@ -20,7 +23,7 @@ def _is_virtual():
     )
 
 
-class VirtualEnv(object):
+class VirtualEnv:
     def _get_root(self):
         default = 'services'
         if _is_virtual():

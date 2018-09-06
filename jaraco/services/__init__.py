@@ -34,6 +34,9 @@ __all__ = [
     'Service',
 ]
 
+__metaclass__ = type
+
+
 log = logging.getLogger(__name__)
 
 
@@ -120,7 +123,7 @@ class ServiceManager(list):
         map(self.stop, reversed(self.running))
 
 
-class Guard(object):
+class Guard:
     """
     Prevent execution of a function unless arguments pass self.allowed()
 
@@ -148,7 +151,7 @@ class Guard(object):
         return True
 
 
-class HTTPStatus(object):
+class HTTPStatus:
     """
     Mix-in for services that have an HTTP Service for checking the status
     """
@@ -178,7 +181,7 @@ class HTTPStatus(object):
         return conn.read()
 
 
-class Subprocess(object):
+class Subprocess:
     """
     Mix-in to handle common subprocess handling
     """
@@ -289,7 +292,7 @@ class Dependable(type):
             dep.depended_by.add(cls)
 
 
-class Service(object):
+class Service:
     "An abstract base class for services"
     __metaclass__ = Dependable
     depends = set()
