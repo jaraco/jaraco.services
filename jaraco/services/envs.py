@@ -69,3 +69,18 @@ class _VEnv(VirtualEnv):
             self.dir,
         ]
         subprocess.check_call(cmd)
+
+
+class ToxEnv(VirtualEnv):
+    """
+    A version of VirtualEnv that relies on tox (and tox-venv)
+    to define and build environments.
+    """
+    root = Path('.tox')
+
+    def ensure_env(self):
+        pass
+
+    def install(self):
+        cmd = ['python', '-m', 'tox', '-e', self.name, '--notest']
+        subprocess.check_call(cmd)

@@ -34,6 +34,8 @@ params = dict(
 		'jaraco.classes',
 		'contextlib2',
 		'virtualenv',
+		'tox',
+		'tox-venv',
 	],
 	extras_require={
 		'testing': [

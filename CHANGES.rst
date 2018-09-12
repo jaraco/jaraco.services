@@ -1,3 +1,9 @@
+1.8
+===
+
+Added new ``envs/ToxEnv`` which leverages tox for defining
+and building environments.
+
 1.7
 ===
 
