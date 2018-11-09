@@ -1,3 +1,8 @@
+1.9
+===
+
+Refresh package metadata, including use of declarative config.
+
 1.8.1
 =====
 
