@@ -174,7 +174,8 @@ class HTTPStatus:
             try:
                 conn = urllib.request.urlopen(url)
                 break
-            except urllib.error.HTTPError as err:
+            # comment below workaround for PyCQA/pyflakes#376
+            except urllib.error.HTTPError as err:  # noqa: F841
                 if timer.split() > timeout:
                     raise ServiceNotRunningError(self.__err.format(**locals()))
                 time.sleep(.5)
