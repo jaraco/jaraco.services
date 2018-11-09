@@ -1,3 +1,8 @@
+1.8.1
+=====
+
+#4: Use ``sys.executable`` when building tox envs.
+
 1.8
 ===
 

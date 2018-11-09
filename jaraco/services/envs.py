@@ -82,5 +82,5 @@ class ToxEnv(VirtualEnv):
         pass
 
     def install(self):
-        cmd = ['python', '-m', 'tox', '-e', self.name, '--notest']
+        cmd = [sys.executable, '-m', 'tox', '-e', self.name, '--notest']
         subprocess.check_call(cmd)
