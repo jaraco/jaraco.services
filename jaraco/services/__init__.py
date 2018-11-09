@@ -25,7 +25,7 @@ from six.moves import urllib
 
 import path
 import portend
-from jaraco.timing import Stopwatch
+from tempora.timing import Stopwatch
 from jaraco.classes import properties
 
 

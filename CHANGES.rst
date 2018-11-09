@@ -3,6 +3,8 @@
 
 Refresh package metadata, including use of declarative config.
 
+Replace deprecated ``jaraco.timing`` dependency with ``tempora``.
+
 1.8.1
 =====
 
