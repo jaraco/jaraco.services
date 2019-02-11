@@ -1,3 +1,8 @@
+3.0
+===
+
+Moved 'envs' functionality to its own package, jaraco.envs.
+
 2.0
 ===
 
