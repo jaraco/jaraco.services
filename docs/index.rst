@@ -12,7 +12,7 @@ Welcome to jaraco.services documentation!
     :undoc-members:
     :show-inheritance:
 
-.. automodule:: jaraco.services.envs
+.. automodule:: jaraco.services.paths
     :members:
     :undoc-members:
     :show-inheritance:
