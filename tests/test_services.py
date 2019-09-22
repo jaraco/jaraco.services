@@ -10,11 +10,7 @@ from jaraco import services
 class TestHTTPStatus:
     def http_error(self, url):
         raise urllib.error.HTTPError(
-            url,
-            code=400,
-            msg='Bad Request',
-            hdrs=dict(),
-            fp=None,
+            url, code=400, msg='Bad Request', hdrs=dict(), fp=None
         )
 
     def test_HTTPError(self, monkeypatch):

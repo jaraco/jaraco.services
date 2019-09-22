@@ -14,11 +14,13 @@ class PathFinder:
     """
     A base class for locating an executable or executables.
     """
+
     candidate_paths = ['']
     "Potential roots to search for self.exe"
 
     def exe(self):
         "The target executable"
+
     if not six.PY2:
         exe = abc.abstractproperty(exe)
 
@@ -41,8 +43,8 @@ class PathFinder:
             result = next(cls.find_valid_roots())
         except StopIteration:
             raise RuntimeError(
-                "{cls.__name__} unable to find executables"
-                .format(**locals()))
+                "{cls.__name__} unable to find executables".format(**locals())
+            )
         return path.Path(result)
 
     @classmethod

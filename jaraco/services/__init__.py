@@ -30,7 +30,11 @@ from jaraco.classes import properties
 
 
 __all__ = [
-    'ServiceManager', 'Guard', 'HTTPStatus', 'Subprocess', 'Dependable',
+    'ServiceManager',
+    'Guard',
+    'HTTPStatus',
+    'Subprocess',
+    'Dependable',
     'Service',
 ]
 
@@ -68,6 +72,7 @@ class ServiceManager(list):
     def running(self):
         def is_running(p):
             return p.is_running()
+
         return filter(is_running, self)
 
     def start(self, service):
@@ -139,12 +144,14 @@ class Guard:
     >>> the_func(1, '1') is None
     True
     """
+
     def __call__(self, func):
         @functools.wraps(func)
         def guarded(*args, **kwargs):
             res = self.allowed(*args, **kwargs)
             if res:
                 return func(*args, **kwargs)
+
         return guarded
 
     def allowed(self, *args, **kwargs):
@@ -178,7 +185,7 @@ class HTTPStatus:
             except urllib.error.HTTPError as err:  # noqa: F841
                 if timer.split() > timeout:
                     raise ServiceNotRunningError(self.__err.format(**locals()))
-                time.sleep(.5)
+                time.sleep(0.5)
         return conn.read()
 
 
@@ -186,6 +193,7 @@ class Subprocess:
     """
     Mix-in to handle common subprocess handling
     """
+
     def is_running(self):
         return (
             self.is_external()
@@ -214,10 +222,7 @@ class Subprocess:
         to use a path relative to the root. If sys.prefix is /usr, it's the
         system Python, so use /var/log.
         """
-        var_log = (
-            os.path.join(sys.prefix, 'var', 'log')
-            .replace('/usr/var', '/var')
-        )
+        var_log = os.path.join(sys.prefix, 'var', 'log').replace('/usr/var', '/var')
         if not os.path.isdir(var_log):
             os.makedirs(var_log)
         return var_log
@@ -263,15 +268,13 @@ class Subprocess:
         def __init__(self, port=None):
             if port is not None:
                 warnings.warn(
-                    "Passing port to PortFree is deprecated",
-                    DeprecationWarning)
+                    "Passing port to PortFree is deprecated", DeprecationWarning
+                )
 
         def allowed(self, service, *args, **kwargs):
             port_free = service.port_free(service.port)
             if not port_free:
-                log.warning(
-                    "%s already running on port %s", service,
-                    service.port)
+                log.warning("%s already running on port %s", service, service.port)
                 service.external = True
             return port_free
 
@@ -285,6 +288,7 @@ class Dependable(type):
     (dep), the other gets a reference to cls in its depended_by
     attribute.
     """
+
     def __init__(cls, name, bases, attribs):
         type.__init__(cls, name, bases, attribs)
         # create a set in this class for dependent services to register
@@ -352,11 +356,7 @@ class PythonService(Service, Subprocess):
         Augment the current environment providing the PYTHONUSERBASE.
         """
         env = dict(os.environ)
-        env.update(
-            getattr(self, 'env', {}),
-            PYTHONUSERBASE=self.env_path,
-            PIP_USER="1",
-        )
+        env.update(getattr(self, 'env', {}), PYTHONUSERBASE=self.env_path, PIP_USER="1")
         self._disable_venv(env)
         return env
 
@@ -374,10 +374,7 @@ class PythonService(Service, Subprocess):
         """
         root = path.Path(os.environ.get('SERVICES_ROOT', 'services'))
         self.env_path = (root / self.name).abspath()
-        cmd = [
-            self.python,
-            '-c', 'import site; print(site.getusersitepackages())',
-        ]
+        cmd = [self.python, '-c', 'import site; print(site.getusersitepackages())']
         out = subprocess.check_output(cmd, env=self._run_env)
         site_packages = out.decode().strip()
         path.Path(site_packages).makedirs_p()
@@ -393,5 +390,5 @@ class PythonService(Service, Subprocess):
         self.install()
         output = (self.env_path / 'output.txt').open('ab')
         self.process = subprocess.Popen(
-            self.command, env=self._run_env,
-            stdout=output, stderr=subprocess.STDOUT)
+            self.command, env=self._run_env, stdout=output, stderr=subprocess.STDOUT
+        )
