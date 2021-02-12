@@ -9,8 +9,6 @@ has been superseded by the more elegant `pytest fixtures
 <https://pytest.org/latest/fixture.html>`_ model.
 """
 
-from __future__ import absolute_import
-
 import os
 import sys
 import logging
@@ -20,9 +18,8 @@ import datetime
 import functools
 import warnings
 import subprocess
+import urllib.request
 from typing import Set
-
-from six.moves import urllib
 
 import path
 import portend
@@ -38,8 +35,6 @@ __all__ = [
     'Dependable',
     'Service',
 ]
-
-__metaclass__ = type
 
 
 log = logging.getLogger(__name__)

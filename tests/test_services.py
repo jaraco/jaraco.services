@@ -1,6 +1,5 @@
 import re
-
-from six.moves import urllib
+import urllib.request
 
 import pytest
 
