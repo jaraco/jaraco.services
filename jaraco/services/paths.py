@@ -1,6 +1,7 @@
 import os
 import subprocess
 import abc
+from typing import List
 
 import path
 
@@ -17,7 +18,7 @@ class PathFinder(metaclass=abc.ABCMeta):
     def exe(self):
         "The target executable"
 
-    args = []
+    args: List[str] = []
     "Additional args to pass to the exe when testing for its suitability"
 
     DEV_NULL = open(os.path.devnull, 'r+')
