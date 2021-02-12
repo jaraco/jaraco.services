@@ -1,3 +1,8 @@
+v3.1.0
+======
+
+* Require Python 3.6 or later.
+
 3.0
 ===
 
