@@ -20,6 +20,7 @@ import datetime
 import functools
 import warnings
 import subprocess
+from typing import Set
 
 from six.moves import urllib
 
@@ -300,7 +301,7 @@ class Dependable(type):
 class Service:
     "An abstract base class for services"
     __metaclass__ = Dependable
-    depends = set()
+    depends: Set[str] = set()
 
     def start(self):
         log.info('Starting service %s', self)
