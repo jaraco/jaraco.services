@@ -21,8 +21,6 @@ class PathFinder(metaclass=abc.ABCMeta):
     args: List[str] = []
     "Additional args to pass to the exe when testing for its suitability"
 
-    DEV_NULL = open(os.path.devnull, 'r+')
-
     @classmethod
     def resolve(cls):
         """
@@ -53,7 +51,8 @@ class PathFinder(metaclass=abc.ABCMeta):
     def is_valid_root(cls, root):
         try:
             cmd = [os.path.join(root, cls.exe)] + cls.args
-            subprocess.check_call(cmd, stdout=cls.DEV_NULL)
+            with open(os.path.devnull, 'r+', encoding='utf-8') as null:
+                subprocess.check_call(cmd, stdout=null)
         except OSError:
             return False
         return True
