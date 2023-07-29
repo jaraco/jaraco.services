@@ -53,7 +53,7 @@ class ServiceManager(list):
     """
 
     def __init__(self, *args, **kwargs):
-        super(ServiceManager, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         msg = "ServiceManager is deprecated. Use fixtures instead."
         warnings.warn(msg, DeprecationWarning)
         self.failed = set()
@@ -206,7 +206,7 @@ class Subprocess:
 
     def stop(self):
         if self.is_running() and not self.is_external():
-            super(Subprocess, self).stop()
+            super().stop()
             self.process.terminate()
             self.process.wait()
             del self.process
@@ -227,7 +227,7 @@ class Subprocess:
         log_name = self.__class__.__name__
         log_filename = os.path.join(self.log_root, log_name)
         log_file = open(log_filename, 'a')
-        self.log_reader = open(log_filename, 'r')
+        self.log_reader = open(log_filename)
         self.log_reader.seek(log_file.tell())
         return log_file
 
@@ -381,7 +381,7 @@ class PythonService(Service, Subprocess):
         subprocess.check_call(cmd, env=self._run_env)
 
     def start(self):
-        super(PythonService, self).start()
+        super().start()
         self.create_env()
         self.install()
         output = (self.env_path / 'output.txt').open('ab')

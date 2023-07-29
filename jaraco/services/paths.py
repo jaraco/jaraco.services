@@ -34,9 +34,7 @@ class PathFinder(metaclass=abc.ABCMeta):
         try:
             result = next(cls.find_valid_roots())
         except StopIteration:
-            raise RuntimeError(
-                "{cls.__name__} unable to find executables".format(**locals())
-            )
+            raise RuntimeError(f"{cls.__name__} unable to find executables")
         return path.Path(result)
 
     @classmethod
