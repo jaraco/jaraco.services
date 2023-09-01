@@ -49,8 +49,7 @@ class PathFinder(metaclass=abc.ABCMeta):
     def is_valid_root(cls, root):
         try:
             cmd = [os.path.join(root, cls.exe)] + cls.args
-            with open(os.path.devnull, 'r+', encoding='utf-8') as null:
-                subprocess.check_call(cmd, stdout=null)
+            subprocess.check_call(cmd, stdout=subprocess.DEVNULL)
         except OSError:
             return False
         return True
