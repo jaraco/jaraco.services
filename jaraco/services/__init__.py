@@ -295,6 +295,7 @@ class Dependable(type):
 
 class Service:
     "An abstract base class for services"
+
     __metaclass__ = Dependable
     depends: Set[str] = set()
 
