@@ -1,3 +1,21 @@
+v4.0.0
+======
+
+Features
+--------
+
+- Deprecated the PythonService.
+- Marked Guard and PortFree as deprecated.
+
+
+Deprecations and Removals
+-------------------------
+
+- Removed ServiceManager.
+- Removed deprecated 'Service.find_free_port'.
+- Removed deprecated 'port' parameter to PortFree.
+
+
 v3.2.0
 ======
 

@@ -1,1 +1,0 @@
-Marked Guard and PortFree as deprecated.
