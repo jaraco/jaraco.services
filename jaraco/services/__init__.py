@@ -1,12 +1,6 @@
 """
 This module provides a Service base class for
 modeling management of a service, typically launched as a subprocess.
-
-The ServiceManager (deprecated)
-acts as a collection of interdependent services, can monitor which are
-running, and will start services on demand. The use case for ServiceManager
-has been superseded by the more elegant `pytest fixtures
-<https://pytest.org/latest/fixture.html>`_ model.
 """
 
 import os
@@ -28,7 +22,6 @@ from jaraco.classes import properties
 
 
 __all__ = [
-    'ServiceManager',
     'Guard',
     'HTTPStatus',
     'Subprocess',
@@ -42,86 +35,6 @@ log = logging.getLogger(__name__)
 
 class ServiceNotRunningError(Exception):
     pass
-
-
-class ServiceManager(list):
-    """
-    A class that manages services that may be required by some of the
-    unit tests. ServiceManager will start up daemon services as
-    subprocesses or threads and will stop them when requested or when
-    destroyed.
-    """
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        msg = "ServiceManager is deprecated. Use fixtures instead."
-        warnings.warn(msg, DeprecationWarning)
-        self.failed = set()
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, type, value, tb):
-        self.stop_all()
-
-    @property
-    def running(self):
-        def is_running(p):
-            return p.is_running()
-
-        return filter(is_running, self)
-
-    def start(self, service):
-        """
-        Start the service, catching and logging exceptions
-        """
-        try:
-            map(self.start_class, service.depends)
-            if service.is_running():
-                return
-            if service in self.failed:
-                log.warning("%s previously failed to start", service)
-                return
-            service.start()
-        except Exception:
-            log.exception("Unable to start service %s", service)
-            self.failed.add(service)
-
-    def start_all(self):
-        "Start all services registered with this manager"
-        for service in self:
-            self.start(service)
-
-    def start_class(self, class_):
-        """
-        Start all services of a given class. If this manager doesn't already
-        have a service of that class, it constructs one and starts it.
-        """
-        matches = filter(lambda svc: isinstance(svc, class_), self)
-        if not matches:
-            svc = class_()
-            self.register(svc)
-            matches = [svc]
-        map(self.start, matches)
-        return matches
-
-    def register(self, service):
-        self.append(service)
-
-    def stop_class(self, class_):
-        "Stop all services of a given class"
-        matches = filter(lambda svc: isinstance(svc, class_), self)
-        map(self.stop, matches)
-
-    def stop(self, service):
-        for dep_class in service.depended_by:
-            self.stop_class(dep_class)
-        service.stop()
-
-    def stop_all(self):
-        # even though we can stop services in order by dependency, still
-        #  stop in reverse order as a reasonable heuristic.
-        map(self.stop, reversed(self.running))
 
 
 class Guard:
