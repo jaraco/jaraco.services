@@ -77,11 +77,9 @@ class HTTPStatus:
 
     proto = 'http'
     status_path = '/_status/system'
-    __url = '{self.proto}://{host}:{self.port}{path}'
-    __err = 'Received status {err.code} from {self} on {host}:{self.port}'
 
     def build_url(self, path, host='localhost'):
-        return self.__url.format(**locals())
+        return f'{self.proto}://{host}:{self.port}{path}'
 
     def wait_for_http(self, host='localhost', timeout=15):
         timeout = datetime.timedelta(seconds=timeout)
@@ -93,10 +91,11 @@ class HTTPStatus:
             try:
                 conn = urllib.request.urlopen(url)
                 break
-            # comment below workaround for PyCQA/pyflakes#376
-            except urllib.error.HTTPError as err:  # noqa: F841
+            except urllib.error.HTTPError as err:
                 if timer.split() > timeout:
-                    raise ServiceNotRunningError(self.__err.format(**locals()))
+                    raise ServiceNotRunningError(
+                        f'Received status {err.code} from {self} on {host}:{self.port}'
+                    )
                 time.sleep(0.5)
         return conn.read()
 
