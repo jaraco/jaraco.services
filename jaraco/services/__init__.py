@@ -12,6 +12,7 @@ import datetime
 import functools
 import subprocess
 import urllib.request
+import warnings
 
 import path
 import portend
@@ -54,6 +55,11 @@ class Guard:
     def __call__(self, func):
         @functools.wraps(func)
         def guarded(*args, **kwargs):
+            warnings.warn(
+                "Guard is deprecated. File an issue with jaraco.services if you encounter this message.",
+                DeprecationWarning,
+                stacklevel=3,
+            )
             res = self.allowed(*args, **kwargs)
             if res:
                 return func(*args, **kwargs)
