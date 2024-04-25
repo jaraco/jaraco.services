@@ -264,6 +264,10 @@ class PythonService(Service, Subprocess):
         subprocess.check_call(cmd, env=self._run_env)
 
     def start(self):
+        warnings.warn(
+            "PythonService is deprecated. "
+            "If anyone is still using it, please file an issue with jaraco.services."
+        )
         super().start()
         self.create_env()
         self.install()
