@@ -174,12 +174,6 @@ class Subprocess:
             raise RuntimeError("Process terminated")
 
     class PortFree(Guard):
-        def __init__(self, port=None):
-            if port is not None:
-                warnings.warn(
-                    "Passing port to PortFree is deprecated", DeprecationWarning
-                )
-
         def allowed(self, service, *args, **kwargs):
             port_free = service.port_free(service.port)
             if not port_free:
