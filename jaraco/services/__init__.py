@@ -12,7 +12,6 @@ import datetime
 import functools
 import subprocess
 import urllib.request
-from typing import Set
 
 import path
 import portend
@@ -24,7 +23,6 @@ __all__ = [
     'Guard',
     'HTTPStatus',
     'Subprocess',
-    'Dependable',
     'Service',
 ]
 
@@ -181,29 +179,8 @@ class Subprocess:
             return port_free
 
 
-class Dependable(type):
-    """
-    Metaclass to keep track of services which are depended on
-    by others.
-
-    When a class (cls) is created which depends on another
-    (dep), the other gets a reference to cls in its depended_by
-    attribute.
-    """
-
-    def __init__(cls, name, bases, attribs):
-        type.__init__(cls, name, bases, attribs)
-        # create a set in this class for dependent services to register
-        cls.depended_by = set()
-        for dep in cls.depends:
-            dep.depended_by.add(cls)
-
-
 class Service:
     "An abstract base class for services"
-
-    __metaclass__ = Dependable
-    depends: Set[str] = set()
 
     def start(self):
         log.info('Starting service %s', self)
