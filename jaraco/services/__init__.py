@@ -10,7 +10,6 @@ import time
 import re
 import datetime
 import functools
-import warnings
 import subprocess
 import urllib.request
 from typing import Set
@@ -225,12 +224,6 @@ class Service:
         except portend.Timeout:
             return False
         return True
-
-    @staticmethod
-    def find_free_port():
-        msg = "Use portend.find_available_local_port"
-        warnings.warn(msg, DeprecationWarning, stacklevel=2)
-        return portend.find_available_local_port()
 
 
 class PythonService(Service, Subprocess):
